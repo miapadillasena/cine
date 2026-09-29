@@ -1,0 +1,87 @@
+.admin-funciones {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.admin-funciones .formulario {
+  margin: 0;
+  width: 420px;
+  flex-shrink: 0;
+}
+
+.fila {
+  display: flex;
+  gap: 12px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.formulario .chip {
+  width: auto;
+  padding: 6px 12px;
+  border: 1px solid #3a3a3f;
+  border-radius: 20px;
+  background: transparent;
+  font-size: 14px;
+}
+
+.formulario .chip.elegido {
+  border-color: #e50914;
+  background: #3a1215;
+}
+
+.exito {
+  color: #46a758;
+}
+
+.listado {
+  flex: 1;
+}
+
+.listado h2 {
+  margin-top: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1c1c1f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #26262a;
+  font-size: 14px;
+}
+
+th {
+  color: #a0a0a0;
+  font-weight: normal;
+}
+
+.borrar {
+  padding: 6px 12px;
+  border: 1px solid #3a3a3f;
+  border-radius: 6px;
+  background: transparent;
+  color: #f2f2f2;
+  cursor: pointer;
+}
+
+.borrar:hover {
+  border-color: #e5484d;
+  color: #e5484d;
+}
+
+.vacio {
+  color: #a0a0a0;
+  text-align: center;
+}

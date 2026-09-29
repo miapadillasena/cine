@@ -1,0 +1,215 @@
+.perfil {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  margin-bottom: 24px;
+  background: #1c1c1f;
+  border-radius: 12px;
+}
+
+.cabecera h1 {
+  margin: 0;
+}
+
+.gris {
+  color: #a0a0a0;
+}
+
+.datos {
+  display: flex;
+  gap: 12px;
+}
+
+.dato {
+  padding: 14px 20px;
+  background: #26262a;
+  border-radius: 8px;
+}
+
+.dato span {
+  display: block;
+  color: #a0a0a0;
+  font-size: 13px;
+}
+
+.dato strong {
+  font-size: 24px;
+}
+
+.pestanas {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #26262a;
+}
+
+.pestanas button {
+  padding: 12px 18px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: #a0a0a0;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.pestanas button.activa {
+  border-bottom-color: #e50914;
+  color: #f2f2f2;
+}
+
+.compra {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: #1c1c1f;
+  border-radius: 10px;
+}
+
+.compra img {
+  width: 60px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.info {
+  flex: 1;
+}
+
+.info h3 {
+  margin: 0 0 4px;
+}
+
+.info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.butacas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.butaca-chip {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #26262a;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.etiqueta {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.etiqueta.vigente { background: #1d3b24; color: #46a758; }
+.etiqueta.usada { background: #26262a; color: #a0a0a0; }
+.etiqueta.cancelada { background: #3a1215; color: #e5484d; }
+
+.cancelar {
+  padding: 6px 14px;
+  border: 1px solid #e5484d;
+  border-radius: 6px;
+  background: transparent;
+  color: #e5484d;
+  cursor: pointer;
+}
+
+.nota {
+  color: #707075;
+  font-size: 12px;
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.vista, .recompensa {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  background: #1c1c1f;
+  border-radius: 10px;
+}
+
+.vista img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.vista h3, .recompensa h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.estrella {
+  color: #3a3a3f;
+}
+
+.estrella.llena {
+  color: #f5c518;
+}
+
+.boton {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #e50914;
+  color: white;
+  cursor: pointer;
+}
+
+.boton:disabled {
+  background: #5a5a5f;
+  cursor: not-allowed;
+}
+
+.canje {
+  display: grid;
+  grid-template-columns: 100px 1fr 110px 110px 90px;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #1c1c1f;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.exito {
+  color: #46a758;
+}
+
+.error {
+  color: #e5484d;
+}
+
+a {
+  color: #e50914;
+}

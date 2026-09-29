@@ -1,0 +1,150 @@
+.bloque {
+  padding: 24px;
+  margin-bottom: 24px;
+  background: #1c1c1f;
+  border-radius: 12px;
+}
+
+.bloque h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.titulo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.chips {
+  display: flex;
+  gap: 6px;
+}
+
+.chips button {
+  padding: 6px 14px;
+  border: 1px solid #3a3a3f;
+  border-radius: 20px;
+  background: transparent;
+  color: #f2f2f2;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.chips button.elegido {
+  border-color: #e50914;
+  background: #3a1215;
+}
+
+.tarjetas {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tarjeta {
+  flex: 1;
+  padding: 16px;
+  background: #26262a;
+  border-radius: 10px;
+}
+
+.tarjeta span {
+  display: block;
+  color: #a0a0a0;
+  font-size: 13px;
+}
+
+.tarjeta strong {
+  font-size: 26px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #26262a;
+  font-size: 14px;
+}
+
+th {
+  color: #a0a0a0;
+  font-weight: normal;
+}
+
+.columnas {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.columnas .bloque {
+  flex: 1;
+}
+
+.columnas h2 {
+  margin-bottom: 16px;
+}
+
+.barra-fila {
+  display: grid;
+  grid-template-columns: 130px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.etiqueta {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.barra-fondo {
+  height: 22px;
+  background: #26262a;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.barra {
+  height: 100%;
+  background: linear-gradient(90deg, #8a0a10, #e50914);
+  border-radius: 6px;
+  transition: width 0.4s;
+}
+
+.barra.candy {
+  background: linear-gradient(90deg, #7a5a08, #f5c518);
+}
+
+.destacado {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #f5c518;
+  border-radius: 10px;
+  background: #2a2412;
+}
+
+.destacado span {
+  color: #a0a0a0;
+  font-size: 13px;
+}
+
+.destacado strong {
+  font-size: 22px;
+  color: #f5c518;
+}
+
+.vacio {
+  color: #a0a0a0;
+  text-align: center;
+}

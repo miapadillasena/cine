@@ -1,0 +1,126 @@
+<div class="reportes">
+  <section class="bloque">
+    <div class="titulo">
+      <h2>Facturación</h2>
+      <div class="chips">
+        <button type="button" [class.elegido]="dias() === 7" (click)="dias.set(7)">7 días</button>
+        <button type="button" [class.elegido]="dias() === 30" (click)="dias.set(30)">30 días</button>
+        <button type="button" [class.elegido]="dias() === 90" (click)="dias.set(90)">90 días</button>
+      </div>
+    </div>
+
+    <div class="tarjetas">
+      <div class="tarjeta">
+        <span>Facturado</span>
+        <strong>{{ totales().total | currency:'ARS':'symbol-narrow' }}</strong>
+      </div>
+      <div class="tarjeta">
+        <span>Entradas vendidas</span>
+        <strong>{{ totales().entradas }}</strong>
+      </div>
+      <div class="tarjeta">
+        <span>Compras</span>
+        <strong>{{ totales().compras }}</strong>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Día</th>
+          <th>Compras</th>
+          <th>Entradas</th>
+          <th>Facturado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (dia of facturacion(); track dia.fecha) {
+          <tr>
+            <td>{{ dia.fecha | date:'dd/MM/yyyy':'UTC' }}</td>
+            <td>{{ dia.compras }}</td>
+            <td>{{ dia.entradas }}</td>
+            <td>{{ dia.total | currency:'ARS':'symbol-narrow' }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="vacio">No hay ventas en este período.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+
+  <div class="columnas">
+    <section class="bloque">
+      <div class="titulo">
+        <h2>Películas más vistas</h2>
+        <div class="chips">
+          <button type="button" [class.elegido]="periodoPeliculas() === 7" (click)="periodoPeliculas.set(7)">Semana</button>
+          <button type="button" [class.elegido]="periodoPeliculas() === 30" (click)="periodoPeliculas.set(30)">Mes</button>
+        </div>
+      </div>
+
+      @for (pelicula of peliculasMasVistas(); track pelicula.nombre) {
+        <div class="barra-fila">
+          <span class="etiqueta">{{ pelicula.nombre }}</span>
+          <div class="barra-fondo">
+            <div class="barra" [style.width.%]="pelicula.cantidad / maximoPeliculas() * 100"></div>
+          </div>
+          <strong>{{ pelicula.cantidad }}</strong>
+        </div>
+      } @empty {
+        <p class="vacio">Sin entradas vendidas en este período.</p>
+      }
+    </section>
+
+    <section class="bloque">
+      <h2>Candy bar</h2>
+
+      @if (productosMasVendidos().length > 0) {
+        <div class="destacado">
+          <span>Producto más vendido</span>
+          <strong>{{ productosMasVendidos()[0].nombre }}</strong>
+          <span>{{ productosMasVendidos()[0].cantidad }} unidades</span>
+        </div>
+      }
+
+      @for (producto of productosMasVendidos(); track producto.nombre) {
+        <div class="barra-fila">
+          <span class="etiqueta">{{ producto.nombre }}</span>
+          <div class="barra-fondo">
+            <div class="barra candy" [style.width.%]="producto.cantidad / maximoProductos() * 100"></div>
+          </div>
+          <strong>{{ producto.cantidad }}</strong>
+        </div>
+      } @empty {
+        <p class="vacio">Todavía no se vendieron productos.</p>
+      }
+    </section>
+  </div>
+
+  <section class="bloque">
+    <h2>Log de actividad</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha y hora</th>
+          <th>Usuario</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (log of logs(); track log.id) {
+          <tr>
+            <td>{{ log.created_at | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+            <td>{{ log.usuarios?.nombre }} {{ log.usuarios?.apellido }}</td>
+            <td>{{ log.accion }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="3" class="vacio">No hay actividad registrada.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+</div>

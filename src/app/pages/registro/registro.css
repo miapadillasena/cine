@@ -1,0 +1,14 @@
+.fila {
+  display: flex;
+  gap: 12px;
+}
+
+.fecha {
+  display: flex;
+  gap: 8px;
+}
+
+.fecha input {
+  flex: 1;
+  min-width: 0;
+}

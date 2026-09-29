@@ -1,0 +1,120 @@
+<div class="admin-peliculas">
+  <section class="formulario">
+    <h1>{{ editandoId() ? 'Editar película' : 'Nueva película' }}</h1>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" formControlName="nombre">
+      </div>
+
+      <div class="form-group">
+        <label for="sinopsis">Sinopsis</label>
+        <textarea id="sinopsis" rows="3" formControlName="sinopsis"></textarea>
+      </div>
+
+      <div class="fila">
+        <div class="form-group">
+          <label for="duracion">Duración (minutos)</label>
+          <input id="duracion" type="number" formControlName="duracion">
+        </div>
+
+        <div class="form-group">
+          <label for="restriccion">Restricción</label>
+          <select id="restriccion" formControlName="restriccion">
+            <option value="ATP">ATP</option>
+            <option value="+13">+13</option>
+            <option value="+18">+18</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Géneros</label>
+        <div class="generos">
+          @for (genero of generos(); track genero.id) {
+            <label class="chip" [class.elegido]="generosElegidos().includes(genero.id)">
+              <input type="checkbox" [checked]="generosElegidos().includes(genero.id)" (change)="toggleGenero(genero.id)">
+              {{ genero.nombre }}
+            </label>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="imagen">Póster</label>
+        @if (imagenActual()) {
+          <img class="poster-actual" [src]="imagenActual()" alt="Póster actual">
+        }
+        <input id="imagen" type="file" accept="image/*" (change)="seleccionarArchivo($event)">
+      </div>
+
+      <div class="fila">
+        <div class="form-group">
+          <label for="fecha_estreno">Fecha de estreno</label>
+          <input id="fecha_estreno" type="text" placeholder="DD/MM/AAAA" formControlName="fecha_estreno">
+          @if (form.get('fecha_estreno')?.invalid && form.get('fecha_estreno')?.touched) {
+            <small>Formato DD/MM/AAAA</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="precio_preventa">Precio de preventa</label>
+          <input id="precio_preventa" type="number" placeholder="Sin preventa" formControlName="precio_preventa">
+        </div>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" formControlName="en_cartelera">
+        Mostrar en la página principal
+      </label>
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+
+      <button type="submit" [disabled]="form.invalid || generosElegidos().length === 0 || guardando()">
+        {{ guardando() ? 'Guardando...' : 'Guardar película' }}
+      </button>
+
+      @if (editandoId()) {
+        <button type="button" class="secundario" (click)="cancelar()">Cancelar edición</button>
+      }
+    </form>
+  </section>
+
+  <section class="listado">
+    <h2>Películas cargadas</h2>
+
+    @for (pelicula of peliculas(); track pelicula.id) {
+      <article class="pelicula">
+        @if (pelicula.imagen_url) {
+          <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre">
+        } @else {
+          <div class="sin-imagen">Sin póster</div>
+        }
+
+        <div class="info">
+          <h3>{{ pelicula.nombre }} <span class="restriccion">{{ pelicula.restriccion }}</span></h3>
+          <p>{{ pelicula.duracion | duracion }} · {{ nombresGeneros(pelicula) }}</p>
+          @if (pelicula.en_cartelera) {
+            <span class="etiqueta">En cartelera</span>
+          }
+          @if (pelicula.fecha_estreno) {
+            <p>Estreno: {{ pelicula.fecha_estreno | date:'dd/MM/yyyy':'UTC' }}</p>
+          }
+          @if (pelicula.precio_preventa) {
+            <p>Preventa: {{ pelicula.precio_preventa | currency:'ARS':'symbol-narrow' }}</p>
+          }
+        </div>
+
+        <div class="acciones">
+          <button type="button" (click)="editar(pelicula)">Editar</button>
+          <button type="button" class="peligro" (click)="eliminar(pelicula)">Borrar</button>
+        </div>
+      </article>
+    } @empty {
+      <p class="vacio">Todavía no hay películas cargadas.</p>
+    }
+  </section>
+</div>

@@ -1,0 +1,89 @@
+@if (pelicula()) {
+  <main class="detalle">
+    <section class="cabecera">
+      @if (pelicula().imagen_url) {
+        <img class="poster" [src]="pelicula().imagen_url" [alt]="pelicula().nombre">
+      }
+
+      <div class="datos">
+        <h1>{{ pelicula().nombre }} <span class="restriccion">{{ pelicula().restriccion }}</span></h1>
+        <p class="meta">{{ pelicula().duracion | duracion }} · {{ nombresGeneros() }}</p>
+
+        <div class="puntaje">
+          @for (n of [1, 2, 3, 4, 5]; track n) {
+            <span class="estrella" [class.llena]="n <= promedio()">★</span>
+          }
+          @if (resenas().length > 0) {
+            <strong>{{ promedio() | number:'1.1-1' }}</strong>
+            <span class="gris">({{ resenas().length }} reseñas)</span>
+          } @else {
+            <span class="gris">Sin reseñas todavía</span>
+          }
+        </div>
+
+        <p class="sinopsis">{{ pelicula().sinopsis }}</p>
+
+        @if (enPreventa()) {
+          <p class="preventa">Preventa: {{ pelicula().precio_preventa | currency:'ARS':'symbol-narrow' }} hasta el estreno</p>
+        }
+      </div>
+    </section>
+
+    <section>
+      <h2>Funciones</h2>
+
+      @if (!ventaAbierta()) {
+        <p class="gris">La venta de entradas abre 7 días antes del estreno.</p>
+      } @else {
+        <div class="funciones">
+          @for (funcion of funciones(); track funcion.id) {
+            <div class="funcion">
+              <strong>{{ funcion.inicio | date:'dd/MM HH:mm' }}</strong>
+              <span>{{ funcion.formato }} · {{ funcion.idioma }}</span>
+              <span class="gris">{{ funcion.salas.nombre }}</span>
+              <span>{{ precioDe(funcion) | currency:'ARS':'symbol-narrow' }}</span>
+              <a class="boton" [routerLink]="['/compra', funcion.id]">Comprar</a>
+            </div>
+          } @empty {
+            <p class="gris">No hay funciones programadas.</p>
+          }
+        </div>
+      }
+    </section>
+
+    <section>
+      <h2>Reseñas</h2>
+
+      @if (authService.usuario()) {
+        <div class="nueva-resena">
+          <p>{{ miResena() ? 'Editá tu reseña' : 'Dejá tu reseña' }}</p>
+          <div>
+            @for (n of [1, 2, 3, 4, 5]; track n) {
+              <button type="button" class="estrella grande" [class.llena]="n <= estrellasElegidas()" (click)="estrellasElegidas.set(n)">★</button>
+            }
+          </div>
+          <textarea rows="3" maxlength="200" placeholder="Comentario corto..." [(ngModel)]="comentario"></textarea>
+          <button type="button" class="boton" [disabled]="estrellasElegidas() === 0" (click)="guardarResena()">Guardar reseña</button>
+          @if (mensaje()) {
+            <p class="gris">{{ mensaje() }}</p>
+          }
+        </div>
+      } @else {
+        <p class="gris"><a routerLink="/login">Iniciá sesión</a> para dejar tu reseña.</p>
+      }
+
+      @for (resena of resenas(); track resena.id) {
+        <article class="resena">
+          <div>
+            @for (n of [1, 2, 3, 4, 5]; track n) {
+              <span class="estrella" [class.llena]="n <= resena.estrellas">★</span>
+            }
+            <strong>{{ resena.autor }}</strong>
+            <span class="gris">{{ resena.created_at | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <p>{{ resena.comentario }}</p>
+        </article>
+      }
+    </section>
+  </main>
+}

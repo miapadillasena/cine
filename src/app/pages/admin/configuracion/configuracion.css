@@ -1,0 +1,87 @@
+.columnas {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.columnas .formulario {
+  flex: 1;
+  max-width: none;
+  margin: 0;
+}
+
+.formulario h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+}
+
+.fila {
+  display: flex;
+  gap: 12px;
+}
+
+.agregar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.agregar input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #3a3a3f;
+  border-radius: 6px;
+  background: #26262a;
+  color: #f2f2f2;
+}
+
+.formulario button.chico {
+  width: auto;
+  padding: 10px 16px;
+}
+
+.fila-lista {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #26262a;
+}
+
+.fila-lista:first-of-type {
+  margin-top: 16px;
+}
+
+.formulario button.borrar {
+  width: auto;
+  padding: 6px 12px;
+  border: 1px solid #3a3a3f;
+  background: transparent;
+  font-size: 13px;
+}
+
+.formulario button.borrar:hover {
+  border-color: #e5484d;
+  color: #e5484d;
+}
+
+.gris {
+  color: #a0a0a0;
+  font-size: 14px;
+}
+
+.nota {
+  margin-top: 12px;
+  color: #707075;
+  font-size: 12px;
+}
+
+.exito {
+  color: #46a758;
+}
+
+.error {
+  color: #e5484d;
+}

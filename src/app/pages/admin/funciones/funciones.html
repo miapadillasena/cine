@@ -1,0 +1,128 @@
+<div class="admin-funciones">
+  <section class="formulario">
+    <h1>Nueva función</h1>
+    <p class="subtitulo">La sala se asigna automáticamente.</p>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <div class="form-group">
+        <label for="pelicula">Película</label>
+        <select id="pelicula" formControlName="pelicula_id">
+          <option value="" disabled>Elegí una película</option>
+          @for (pelicula of peliculas(); track pelicula.id) {
+            <option [value]="pelicula.id">{{ pelicula.nombre }} ({{ pelicula.duracion }} min)</option>
+          }
+        </select>
+      </div>
+
+      <div class="fila">
+        <div class="form-group">
+          <label for="formato">Formato</label>
+          <select id="formato" formControlName="formato">
+            <option value="2D">2D</option>
+            <option value="3D">3D</option>
+            <option value="4D">4D</option>
+            <option value="5D">5D</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="idioma">Idioma</label>
+          <select id="idioma" formControlName="idioma">
+            <option value="Castellano">Castellano</option>
+            <option value="Subtitulada">Subtitulada</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="form-group">
+          <label for="hora">Hora</label>
+          <input id="hora" type="text" placeholder="HH:MM" formControlName="hora">
+          @if (form.get('hora')?.invalid && form.get('hora')?.touched) {
+            <small>Formato HH:MM</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Precio</label>
+          <input id="precio" type="number" formControlName="precio">
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="form-group">
+          <label for="desde">Fecha</label>
+          <input id="desde" type="text" placeholder="DD/MM/AAAA" formControlName="desde">
+          @if (form.get('desde')?.invalid && form.get('desde')?.touched) {
+            <small>Formato DD/MM/AAAA</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="hasta">Repetir hasta (opcional)</label>
+          <input id="hasta" type="text" placeholder="DD/MM/AAAA" formControlName="hasta">
+          @if (form.get('hasta')?.invalid && form.get('hasta')?.touched) {
+            <small>Formato DD/MM/AAAA</small>
+          }
+        </div>
+      </div>
+
+      @if (form.get('hasta')?.value) {
+        <div class="form-group">
+          <label>Días de la semana</label>
+          <div class="chips">
+            @for (dia of dias; track dia.numero) {
+              <button type="button" class="chip" [class.elegido]="diasElegidos().includes(dia.numero)" (click)="toggleDia(dia.numero)">
+                {{ dia.nombre }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      @if (mensaje()) {
+        <p class="exito">{{ mensaje() }}</p>
+      }
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+
+      <button type="submit" [disabled]="form.invalid || guardando()">
+        {{ guardando() ? 'Creando...' : 'Crear función' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="listado">
+    <h2>Próximas funciones</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha y hora</th>
+          <th>Película</th>
+          <th>Sala</th>
+          <th>Formato</th>
+          <th>Precio</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (funcion of funciones(); track funcion.id) {
+          <tr>
+            <td>{{ funcion.inicio | date:'dd/MM/yyyy HH:mm' }} a {{ funcion.fin | date:'HH:mm' }}</td>
+            <td>{{ funcion.peliculas.nombre }}</td>
+            <td>{{ funcion.salas.nombre }}</td>
+            <td>{{ funcion.formato }} · {{ funcion.idioma }}</td>
+            <td>{{ funcion.precio | currency:'ARS':'symbol-narrow' }}</td>
+            <td><button type="button" class="borrar" (click)="eliminar(funcion)">Borrar</button></td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="vacio">No hay funciones programadas.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+</div>

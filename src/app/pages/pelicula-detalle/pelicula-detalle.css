@@ -1,0 +1,152 @@
+.detalle {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+section {
+  margin-bottom: 40px;
+}
+
+.cabecera {
+  display: flex;
+  gap: 32px;
+}
+
+.poster {
+  width: 260px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+h1 {
+  margin: 0 0 8px;
+}
+
+.restriccion {
+  padding: 2px 8px;
+  border: 1px solid #a0a0a0;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #a0a0a0;
+  vertical-align: middle;
+}
+
+.meta, .gris {
+  color: #a0a0a0;
+}
+
+.sinopsis {
+  line-height: 1.6;
+}
+
+.puntaje {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.estrella {
+  color: #3a3a3f;
+  font-size: 20px;
+}
+
+.estrella.llena {
+  color: #f5c518;
+}
+
+button.estrella {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.estrella.grande {
+  font-size: 30px;
+}
+
+.preventa {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #3a1215;
+  color: #ff6b6b;
+}
+
+.funciones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.funcion {
+  display: grid;
+  grid-template-columns: 120px 1fr 100px 100px 110px;
+  align-items: center;
+  padding: 12px 16px;
+  background: #1c1c1f;
+  border-radius: 8px;
+}
+
+.boton {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #e50914;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.boton:disabled {
+  background: #5a5a5f;
+  cursor: not-allowed;
+}
+
+.nueva-resena {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: #1c1c1f;
+  border-radius: 10px;
+}
+
+.nueva-resena p {
+  margin: 0;
+}
+
+textarea {
+  padding: 10px;
+  border: 1px solid #3a3a3f;
+  border-radius: 6px;
+  background: #26262a;
+  color: #f2f2f2;
+  font-family: sans-serif;
+  font-size: 15px;
+}
+
+.resena {
+  padding: 16px;
+  margin-bottom: 10px;
+  background: #1c1c1f;
+  border-radius: 8px;
+}
+
+.resena div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.resena p {
+  margin: 8px 0 0;
+}
+
+a {
+  color: #e50914;
+}

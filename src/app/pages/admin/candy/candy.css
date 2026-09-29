@@ -1,0 +1,151 @@
+.bloque {
+  margin-bottom: 32px;
+}
+
+.doble {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.doble .formulario {
+  margin: 0;
+  width: 380px;
+  flex-shrink: 0;
+}
+
+.formulario h2 {
+  margin-top: 0;
+}
+
+h2 {
+  margin: 0 0 12px;
+}
+
+.fila {
+  display: flex;
+  gap: 12px;
+}
+
+.agregar {
+  display: flex;
+  gap: 8px;
+  max-width: 420px;
+  margin-bottom: 12px;
+}
+
+.agregar input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #3a3a3f;
+  border-radius: 6px;
+  background: #1c1c1f;
+  color: #f2f2f2;
+}
+
+.boton {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #e50914;
+  color: white;
+  cursor: pointer;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 6px 6px 14px;
+  border: 1px solid #3a3a3f;
+  border-radius: 20px;
+}
+
+.quitar {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: #26262a;
+  color: #a0a0a0;
+  cursor: pointer;
+}
+
+.quitar:hover {
+  background: #e5484d;
+  color: white;
+}
+
+.foto-actual {
+  width: 60px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.secundario {
+  margin-top: 8px;
+  background: transparent !important;
+  border: 1px solid #3a3a3f !important;
+}
+
+.listado {
+  flex: 1;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #1c1c1f;
+  border-radius: 8px;
+}
+
+.item img, .sin-foto {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #26262a;
+}
+
+.info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.gris {
+  color: #a0a0a0;
+  font-size: 14px;
+}
+
+.acciones {
+  display: flex;
+  gap: 6px;
+}
+
+.acciones button {
+  padding: 6px 12px;
+  border: 1px solid #3a3a3f;
+  border-radius: 6px;
+  background: transparent;
+  color: #f2f2f2;
+  cursor: pointer;
+}
+
+.acciones button.peligro:hover {
+  border-color: #e5484d;
+  color: #e5484d;
+}
+
+.error {
+  color: #e5484d;
+}

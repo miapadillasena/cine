@@ -1,0 +1,148 @@
+<div class="candy">
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <section class="bloque">
+    <h2>Categorías</h2>
+    <div class="agregar">
+      <input type="text" placeholder="Nueva categoría" [(ngModel)]="nuevaCategoria">
+      <button type="button" class="boton" (click)="agregarCategoria()">Agregar</button>
+    </div>
+    <div class="chips">
+      @for (categoria of categorias(); track categoria.id) {
+        <span class="chip">
+          {{ categoria.nombre }}
+          <button type="button" class="quitar" (click)="eliminarCategoria(categoria)">×</button>
+        </span>
+      }
+    </div>
+  </section>
+
+  <section class="bloque doble">
+    <div class="formulario">
+      <h2>{{ editandoProducto() ? 'Editar producto' : 'Nuevo producto' }}</h2>
+
+      <form [formGroup]="formProducto" (ngSubmit)="guardarProducto()">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" type="text" formControlName="nombre">
+        </div>
+
+        <div class="fila">
+          <div class="form-group">
+            <label for="precio">Precio</label>
+            <input id="precio" type="number" formControlName="precio">
+          </div>
+
+          <div class="form-group">
+            <label for="categoria">Categoría</label>
+            <select id="categoria" formControlName="categoria_id">
+              <option value="" disabled>Elegí</option>
+              @for (categoria of categorias(); track categoria.id) {
+                <option [value]="categoria.id">{{ categoria.nombre }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="imagen">Foto</label>
+          @if (imagenActual()) {
+            <img class="foto-actual" [src]="imagenActual()" alt="Foto actual">
+          }
+          <input id="imagen" type="file" accept="image/*" (change)="seleccionarArchivo($event)">
+        </div>
+
+        <button type="submit" [disabled]="formProducto.invalid">Guardar producto</button>
+        @if (editandoProducto()) {
+          <button type="button" class="secundario" (click)="cancelarProducto()">Cancelar edición</button>
+        }
+      </form>
+    </div>
+
+    <div class="listado">
+      <h2>Productos</h2>
+      @for (producto of productos(); track producto.id) {
+        <article class="item">
+          @if (producto.imagen_url) {
+            <img [src]="producto.imagen_url" [alt]="producto.nombre">
+          } @else {
+            <div class="sin-foto"></div>
+          }
+          <div class="info">
+            <strong>{{ producto.nombre }}</strong>
+            <span class="gris">{{ producto.categorias?.nombre }}</span>
+          </div>
+          <strong>{{ producto.precio | currency:'ARS':'symbol-narrow' }}</strong>
+          <div class="acciones">
+            <button type="button" (click)="editarProducto(producto)">Editar</button>
+            <button type="button" class="peligro" (click)="eliminarProducto(producto)">Borrar</button>
+          </div>
+        </article>
+      } @empty {
+        <p class="gris">Todavía no hay productos.</p>
+      }
+    </div>
+  </section>
+
+  <section class="bloque doble">
+    <div class="formulario">
+      <h2>Nuevo combo</h2>
+      <p class="subtitulo">Entrada + pochoclos + bebida a precio fijo.</p>
+
+      <form [formGroup]="formCombo" (ngSubmit)="guardarCombo()">
+        <div class="form-group">
+          <label for="nombre-combo">Nombre</label>
+          <input id="nombre-combo" type="text" formControlName="nombre">
+        </div>
+
+        <div class="form-group">
+          <label for="pochoclo">Pochoclos</label>
+          <select id="pochoclo" formControlName="pochoclo_id">
+            <option value="" disabled>Elegí</option>
+            @for (producto of productosDe('Pochoclos'); track producto.id) {
+              <option [value]="producto.id">{{ producto.nombre }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="bebida">Bebida</label>
+          <select id="bebida" formControlName="bebida_id">
+            <option value="" disabled>Elegí</option>
+             @for (producto of productosDe('Bebidas'); track producto.id) {
+              <option [value]="producto.id">{{ producto.nombre }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="precio-combo">Precio fijo</label>
+          <input id="precio-combo" type="number" formControlName="precio">
+        </div>
+
+        <button type="submit" [disabled]="formCombo.invalid">Crear combo</button>
+      </form>
+    </div>
+
+    <div class="listado">
+      <h2>Combos</h2>
+      @for (combo of combos(); track combo.id) {
+        <article class="item">
+          <div class="info">
+            <strong>{{ combo.nombre }}</strong>
+            <span class="gris">Entrada + {{ nombreProducto(combo.pochoclo_id) }} + {{ nombreProducto(combo.bebida_id) }}</span>
+          </div>
+          <strong>{{ combo.precio | currency:'ARS':'symbol-narrow' }}</strong>
+          <div class="acciones">
+            <button type="button" (click)="cambiarPrecioCombo(combo)">Cambiar precio</button>
+            <button type="button" class="peligro" (click)="eliminarCombo(combo)">Borrar</button>
+          </div>
+        </article>
+      } @empty {
+        <p class="gris">Todavía no hay combos.</p>
+      }
+    </div>
+  </section>
+</div>

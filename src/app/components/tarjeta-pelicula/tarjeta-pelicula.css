@@ -1,0 +1,52 @@
+.tarjeta {
+  position: relative;
+  display: block;
+  background: #1c1c1f;
+  border-radius: 10px;
+  overflow: hidden;
+  color: #f2f2f2;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta img, .sin-imagen {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.sin-imagen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: #26262a;
+  color: #a0a0a0;
+  text-align: center;
+}
+
+.info {
+  padding: 12px;
+}
+
+.info h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.info p {
+  margin: 0;
+  color: #a0a0a0;
+  font-size: 13px;
+}
+
+.posicion {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #e50914;
+  font-weight: bold;
+}

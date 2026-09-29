@@ -1,0 +1,107 @@
+<div class="configuracion">
+  @if (mensaje()) {
+    <p class="exito">{{ mensaje() }}</p>
+  }
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <div class="columnas">
+    <section class="formulario">
+      <h2>Precios y descuentos</h2>
+      <form [formGroup]="formConfig" (ngSubmit)="guardarConfiguracion()">
+        <div class="form-group">
+          <label for="porcentaje">Descuento primera compra (%)</label>
+          <input id="porcentaje" type="number" formControlName="porcentaje_primera_compra">
+        </div>
+        <div class="form-group">
+          <label for="recargo">Recargo butaca VIP ($)</label>
+          <input id="recargo" type="number" formControlName="recargo_vip">
+        </div>
+        <button type="submit" [disabled]="formConfig.invalid">Guardar</button>
+      </form>
+    </section>
+
+    <section class="formulario">
+      <h2>Salas</h2>
+      <div class="agregar">
+        <input type="text" placeholder="Nombre de la sala" [(ngModel)]="nuevaSala">
+        <button type="button" class="chico" (click)="agregarSala()">Agregar</button>
+      </div>
+      @for (sala of salas(); track sala.id) {
+        <div class="fila-lista">
+          <span>{{ sala.nombre }}</span>
+          <button type="button" class="borrar" (click)="eliminarSala(sala)">Borrar</button>
+        </div>
+      }
+      <p class="nota">Todas las salas tienen la misma distribución de 518 butacas.</p>
+    </section>
+  </div>
+
+  <div class="columnas">
+    <section class="formulario">
+      <h2>Cupones para mayores de 50</h2>
+      <form [formGroup]="formCupon" (ngSubmit)="crearCupon()">
+        <div class="fila">
+          <div class="form-group">
+            <label for="codigo">Código</label>
+            <input id="codigo" type="text" formControlName="codigo">
+          </div>
+          <div class="form-group">
+            <label for="porcentaje-cupon">Descuento (%)</label>
+            <input id="porcentaje-cupon" type="number" formControlName="porcentaje">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="vigencia">Válido hasta (opcional)</label>
+          <input id="vigencia" type="text" placeholder="DD/MM/AAAA" formControlName="vigente_hasta">
+        </div>
+        <button type="submit" [disabled]="formCupon.invalid">Crear cupón</button>
+      </form>
+
+      @for (cupon of cupones(); track cupon.id) {
+        <div class="fila-lista">
+          <span><strong>{{ cupon.codigo }}</strong> · {{ cupon.porcentaje }}%</span>
+          <span class="gris">
+            {{ cupon.vigente_hasta ? 'Hasta ' + (cupon.vigente_hasta | date:'dd/MM/yyyy':'UTC') : 'Sin vencimiento' }}
+          </span>
+          <button type="button" class="borrar" (click)="eliminarCupon(cupon)">Borrar</button>
+        </div>
+      }
+    </section>
+
+    <section class="formulario">
+      <h2>Recompensas por puntos</h2>
+      <form [formGroup]="formRecompensa" (ngSubmit)="crearRecompensa()">
+        <div class="fila">
+          <div class="form-group">
+            <label for="nombre-recompensa">Nombre</label>
+            <input id="nombre-recompensa" type="text" formControlName="nombre">
+          </div>
+          <div class="form-group">
+            <label for="puntos">Puntos</label>
+            <input id="puntos" type="number" formControlName="puntos">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="producto">Producto</label>
+          <select id="producto" formControlName="producto_id">
+            <option value="">Entrada gratis</option>
+            @for (producto of productos(); track producto.id) {
+              <option [value]="producto.id">{{ producto.nombre }}</option>
+            }
+          </select>
+        </div>
+        <button type="submit" [disabled]="formRecompensa.invalid">Crear recompensa</button>
+      </form>
+
+      @for (recompensa of recompensas(); track recompensa.id) {
+        <div class="fila-lista">
+          <span><strong>{{ recompensa.nombre }}</strong></span>
+          <span class="gris">{{ recompensa.puntos }} pts · {{ recompensa.productos?.nombre || 'Entrada' }}</span>
+          <button type="button" class="borrar" (click)="eliminarRecompensa(recompensa)">Borrar</button>
+        </div>
+      }
+    </section>
+  </div>
+</div>

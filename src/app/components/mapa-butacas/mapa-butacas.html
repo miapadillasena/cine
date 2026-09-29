@@ -1,0 +1,38 @@
+<div class="mapa">
+  <div class="pantalla">PANTALLA</div>
+
+  @for (fila of filas; track fila.letra) {
+    <div class="fila" [class.fila-accesible]="fila.tipo === 'accesible'">
+      <span class="letra">{{ fila.letra }}</span>
+
+      @for (bloque of fila.bloques; track $index) {
+        <div class="bloque">
+          @for (numero of bloque; track numero) {
+            <button
+              type="button"
+              class="butaca"
+              [class.vip]="fila.tipo === 'vip'"
+              [class.accesible]="fila.tipo === 'accesible'"
+              [class.seleccionada]="estaSeleccionada(fila.letra, numero)"
+              [class.ocupada]="estaOcupada(fila.letra, numero)"
+              [disabled]="estaOcupada(fila.letra, numero)"
+              [title]="fila.letra + numero"
+              (click)="toggle(fila.letra, numero, fila.tipo)">
+              {{ numero }}
+            </button>
+          }
+        </div>
+      }
+
+      <span class="letra">{{ fila.letra }}</span>
+    </div>
+  }
+
+  <div class="referencias">
+    <span><i class="muestra"></i> Libre</span>
+    <span><i class="muestra seleccionada"></i> Seleccionada</span>
+    <span><i class="muestra ocupada"></i> Ocupada</span>
+    <span><i class="muestra accesible"></i> Accesible</span>
+    <span><i class="muestra vip"></i> VIP</span>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+.panel {
+  display: flex;
+  min-height: calc(100vh - 70px);
+}
+
+aside {
+  width: 220px;
+  padding: 24px 16px;
+  background: #0b0b0c;
+  border-right: 1px solid #26262a;
+}
+
+aside h2 {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+aside a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: #a0a0a0;
+  text-decoration: none;
+}
+
+aside a:hover {
+  background: #1c1c1f;
+}
+
+aside a.activo {
+  background: #1c1c1f;
+  color: #f2f2f2;
+  border-left: 3px solid #e50914;
+}
+
+main {
+  flex: 1;
+  padding: 24px 32px;
+}

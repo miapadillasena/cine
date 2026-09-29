@@ -1,0 +1,66 @@
+<main class="home">
+  @if (masVendidas().length > 0) {
+    <section>
+      <h1>Las más vendidas</h1>
+      <div class="grilla destacadas">
+        @for (pelicula of masVendidas(); track pelicula.id; let i = $index) {
+          <app-tarjeta-pelicula [pelicula]="pelicula" [posicion]="i + 1" />
+        }
+      </div>
+    </section>
+  }
+
+    @if (proximas().length > 0) {
+    <section>
+      <h2>Próximamente</h2>
+      <div class="grilla">
+        @for (pelicula of proximas(); track pelicula.id) {
+          <article class="proxima" appResaltar>
+            @if (pelicula.imagen_url) {
+              <img [src]="pelicula.imagen_url" [alt]="pelicula.nombre">
+            } @else {
+              <div class="sin-imagen">{{ pelicula.nombre }}</div>
+            }
+            <div class="info">
+              <h3>{{ pelicula.nombre }}</h3>
+              <p class="gris">Estreno: {{ pelicula.fecha_estreno | date:'dd/MM/yyyy':'UTC' }}</p>
+
+              @if (ventaAbierta(pelicula)) {
+                <a class="boton-alerta abierta" [routerLink]="['/pelicula', pelicula.id]">Preventa disponible</a>
+              } @else if (authService.usuario()) {
+                <button type="button" class="boton-alerta" [class.activa]="tieneAlerta(pelicula.id)" (click)="toggleAlerta(pelicula)">
+                  {{ tieneAlerta(pelicula.id) ? '🔔 Alerta activa' : '🔕 Avisarme' }}
+                </button>
+              } @else {
+                <a routerLink="/login" class="gris chico">Iniciá sesión para recibir un aviso</a>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  }
+  
+  <section>
+    <h2>Cartelera</h2>
+
+    <input class="buscador" type="text" placeholder="Buscar película..." [(ngModel)]="busqueda">
+
+    <div class="chips">
+      <button type="button" class="chip" [class.elegido]="generoElegido() === 0" (click)="generoElegido.set(0)">Todos</button>
+      @for (genero of generos(); track genero.id) {
+        <button type="button" class="chip" [class.elegido]="generoElegido() === genero.id" (click)="generoElegido.set(genero.id)">
+          {{ genero.nombre }}
+        </button>
+      }
+    </div>
+
+    <div class="grilla">
+      @for (pelicula of filtradas(); track pelicula.id) {
+        <app-tarjeta-pelicula [pelicula]="pelicula" />
+      } @empty {
+        <p class="vacio">No hay películas que coincidan con la búsqueda.</p>
+      }
+    </div>
+  </section>
+</main>

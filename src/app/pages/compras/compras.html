@@ -1,0 +1,288 @@
+@if (funcion()) {
+  <main class="compra">
+    <header class="cabecera">
+      @if (funcion().peliculas.imagen_url) {
+        <img [src]="funcion().peliculas.imagen_url" [alt]="funcion().peliculas.nombre">
+      }
+      <div>
+        <h1>{{ funcion().peliculas.nombre }} <span class="restriccion">{{ funcion().peliculas.restriccion }}</span></h1>
+        <p>{{ funcion().inicio | date:'dd/MM/yyyy HH:mm' }} · {{ funcion().salas.nombre }} · {{ funcion().formato }} · {{ funcion().idioma }}</p>
+      </div>
+    </header>
+
+    @if (noDisponible()) {
+      <p class="error">{{ noDisponible() }}</p>
+    } @else if (paso() === 1) {
+      <div class="contenido">
+        <app-mapa-butacas [ocupadas]="ocupadas()" [(seleccionadas)]="seleccionadas" />
+
+        <aside class="resumen">
+          <h2>Tus butacas</h2>
+
+          @for (butaca of seleccionadas(); track butaca.fila + butaca.numero) {
+            <div class="item">
+              <span>
+                Fila {{ butaca.fila }} · Butaca {{ butaca.numero }}
+                @if (butaca.vip) { <span class="etiqueta vip">VIP</span> }
+                @if (butaca.accesible) { <span class="etiqueta accesible">Accesible</span> }
+              </span>
+              <strong>{{ precioButaca(butaca) | currency:'ARS':'symbol-narrow' }}</strong>
+            </div>
+          } @empty {
+            <p class="gris">Elegí tus butacas en el mapa (máximo 10).</p>
+          }
+
+          @if (hayVip()) {
+            <p class="aviso-vip">
+              Elegiste butacas VIP. Cada una cuesta {{ recargoVip() | currency:'ARS':'symbol-narrow' }} más que una común.
+            </p>
+          }
+
+          @if (aviso()) {
+            <p class="error">{{ aviso() }}</p>
+          }
+
+          <div class="total">
+            <span>Total entradas</span>
+            <strong>{{ totalEntradas() | currency:'ARS':'symbol-narrow' }}</strong>
+          </div>
+
+          <button type="button" class="boton" [disabled]="seleccionadas().length === 0" (click)="continuar()">
+            Continuar
+          </button>
+        </aside>
+      </div>
+    } @else if (paso() === 2) {
+      <div class="contenido">
+        <div class="candy">
+          @if (combos().length > 0) {
+            <section>
+              <h2>Combos destacados</h2>
+              <div class="grilla-candy">
+                @for (combo of combos(); track combo.id) {
+                  <article class="producto combo" appResaltar>
+                    <span class="etiqueta-combo">COMBO</span>
+                    <h3>{{ combo.nombre }}</h3>
+                    <p class="gris">Entrada + {{ nombreProducto(combo.pochoclo_id) }} + {{ nombreProducto(combo.bebida_id) }}</p>
+                    <strong>{{ combo.precio | currency:'ARS':'symbol-narrow' }}</strong>
+                    <div class="contador">
+                      <button type="button" (click)="cambiarCombo(combo.id, -1)">−</button>
+                      <span>{{ cantidadCombo(combo.id) }}</span>
+                      <button type="button" (click)="cambiarCombo(combo.id, 1)">+</button>
+                    </div>
+                  </article>
+                }
+              </div>
+            </section>
+          }
+
+          @for (grupo of productosPorCategoria(); track grupo.nombre) {
+            <section>
+              <h2>{{ grupo.nombre }}</h2>
+              <div class="grilla-candy">
+                @for (producto of grupo.productos; track producto.id) {
+                  <article class="producto" appResaltar>
+                    @if (producto.imagen_url) {
+                      <img [src]="producto.imagen_url" [alt]="producto.nombre">
+                    }
+                    <h3>{{ producto.nombre }}</h3>
+                    <strong>{{ producto.precio | currency:'ARS':'symbol-narrow' }}</strong>
+                    <div class="contador">
+                      <button type="button" (click)="cambiarProducto(producto.id, -1)">−</button>
+                      <span>{{ cantidadProducto(producto.id) }}</span>
+                      <button type="button" (click)="cambiarProducto(producto.id, 1)">+</button>
+                    </div>
+                  </article>
+                }
+              </div>
+            </section>
+          }
+        </div>
+
+        <aside class="resumen">
+          <h2>Resumen</h2>
+
+          <div class="item">
+            <span>Entradas ({{ seleccionadas().length }})</span>
+            <strong>{{ totalEntradas() | currency:'ARS':'symbol-narrow' }}</strong>
+          </div>
+
+          @for (combo of combosElegidos(); track combo.id) {
+            <div class="item">
+              <span>{{ cantidadCombo(combo.id) }} × {{ combo.nombre }}</span>
+              <strong>{{ combo.precio * cantidadCombo(combo.id) | currency:'ARS':'symbol-narrow' }}</strong>
+            </div>
+          }
+
+          @if (descuentoCombos() > 0) {
+            <div class="item">
+              <span class="gris">Entradas incluidas en combos</span>
+              <strong>-{{ descuentoCombos() | currency:'ARS':'symbol-narrow' }}</strong>
+            </div>
+          }
+
+          @for (producto of productosElegidos(); track producto.id) {
+            <div class="item">
+              <span>{{ cantidadProducto(producto.id) }} × {{ producto.nombre }}</span>
+              <strong>{{ producto.precio * cantidadProducto(producto.id) | currency:'ARS':'symbol-narrow' }}</strong>
+            </div>
+          }
+
+          @if (aviso()) {
+            <p class="error">{{ aviso() }}</p>
+          }
+
+          <div class="total">
+            <span>Subtotal</span>
+            <strong>{{ subtotal() | currency:'ARS':'symbol-narrow' }}</strong>
+          </div>
+
+          <button type="button" class="boton" (click)="paso.set(3)">Continuar al pago</button>
+          <button type="button" class="boton secundario" (click)="paso.set(1)">Volver a butacas</button>
+        </aside>
+      </div>
+    } @else if (paso() === 3) {
+      <div class="contenido">
+        <div class="pago">
+          @if (edadMinima() > 0) {
+            <section class="tarjeta-pago">
+              <h2>Restricción de edad</h2>
+              <p class="gris">Esta película es {{ funcion().peliculas.restriccion }}.</p>
+              @if (!authService.usuario()) {
+                <div class="form-group">
+                  <label for="nacimiento">Tu fecha de nacimiento</label>
+                  <input id="nacimiento" type="text" placeholder="DD/MM/AAAA" [(ngModel)]="fechaNacimiento">
+                </div>
+              }
+              @if (bloqueoEdad()) {
+                <p class="error">{{ bloqueoEdad() }}</p>
+              }
+            </section>
+          }
+
+          <section class="tarjeta-pago">
+            <h2>Descuentos</h2>
+            @if (authService.usuario()) {
+              @if (esPrimeraCompra()) {
+                <p class="exito">Tenés {{ porcentajePrimera() }}% de descuento por ser tu primera compra.</p>
+              }
+              <div class="cupon">
+                <input type="text" placeholder="Código de cupón" [(ngModel)]="codigoCupon">
+                <button type="button" (click)="aplicarCupon()">Aplicar</button>
+              </div>
+              @if (mensajeCupon()) {
+                <p class="gris">{{ mensajeCupon() }}</p>
+              }
+              <p class="nota">Se aplica un solo descuento por compra: el mayor.</p>
+            } @else {
+              <p class="gris"><a routerLink="/registro">Registrate</a> y obtené {{ porcentajePrimera() }}% de descuento en tu primera compra.</p>
+            }
+          </section>
+
+          @if (creditoDisponible() > 0) {
+            <section class="tarjeta-pago">
+              <h2>Crédito</h2>
+              <label class="check">
+                <input type="checkbox" [(ngModel)]="usarCredito">
+                Usar mi crédito ({{ creditoDisponible() | currency:'ARS':'symbol-narrow' }})
+              </label>
+            </section>
+          }
+
+          @if (totalAPagar() > 0) {
+            <section class="tarjeta-pago">
+              <h2>Medio de pago</h2>
+              <div class="medios">
+                @for (medio of mediosPago; track medio) {
+                  <button type="button" class="medio" [class.elegido]="medioPago() === medio" (click)="medioPago.set(medio)">
+                    {{ medio }}
+                  </button>
+                }
+              </div>
+              <p class="nota">Pago simulado: no se realiza ningún cobro real.</p>
+            </section>
+          }
+        </div>
+
+        <aside class="resumen">
+          <h2>Total</h2>
+
+          <div class="item">
+            <span>Subtotal</span>
+            <strong>{{ subtotal() | currency:'ARS':'symbol-narrow' }}</strong>
+          </div>
+
+          @if (descuento() > 0) {
+            <div class="item">
+              <span class="exito">Descuento</span>
+              <strong class="exito">-{{ descuento() | currency:'ARS':'symbol-narrow' }}</strong>
+            </div>
+          }
+
+          @if (creditoUsado() > 0) {
+            <div class="item">
+              <span>Crédito usado</span>
+              <strong>-{{ creditoUsado() | currency:'ARS':'symbol-narrow' }}</strong>
+            </div>
+          }
+
+          <div class="total">
+            <span>A pagar</span>
+            <strong>{{ totalAPagar() | currency:'ARS':'symbol-narrow' }}</strong>
+          </div>
+
+          @if (puntosAGanar() > 0) {
+            <p class="gris">Con esta compra sumás {{ puntosAGanar() }} puntos.</p>
+          }
+
+          @if (errorPago()) {
+            <p class="error">{{ errorPago() }}</p>
+          }
+
+          <button
+            type="button"
+            class="boton"
+            [disabled]="bloqueoEdad() !== '' || (totalAPagar() > 0 && !medioPago()) || procesando()"
+            (click)="pagar()">
+            {{ procesando() ? 'Procesando...' : 'Pagar' }}
+          </button>
+          <button type="button" class="boton secundario" (click)="paso.set(2)">Volver al candy</button>
+        </aside>
+      </div>
+    } @else if (paso() === 4) {
+      <section class="confirmacion">
+        <h2>¡Compra confirmada!</h2>
+        <p class="gris">Presentá este código en el ingreso a la sala y en el candy bar.</p>
+
+        <div class="codigo">{{ codigoCompra() }}</div>
+
+        <p>{{ funcion().peliculas.nombre }} · {{ funcion().inicio | date:'dd/MM/yyyy HH:mm' }} · {{ funcion().salas.nombre }}</p>
+
+        <div class="butacas-compradas">
+          @for (butaca of seleccionadas(); track butaca.fila + butaca.numero) {
+            <span class="butaca-chip" [class.vip]="butaca.vip">{{ butaca.fila }}{{ butaca.numero }}</span>
+          }
+        </div>
+
+        @for (combo of combosElegidos(); track combo.id) {
+          <p class="gris">{{ cantidadCombo(combo.id) }} × {{ combo.nombre }}</p>
+        }
+        @for (producto of productosElegidos(); track producto.id) {
+          <p class="gris">{{ cantidadProducto(producto.id) }} × {{ producto.nombre }}</p>
+        }
+
+        @if (edadMinima() > 0) {
+          <p class="aviso-vip">Película {{ funcion().peliculas.restriccion }}: debe asistir un adulto.</p>
+        }
+
+        <p>Total pagado: <strong>{{ totalPagado() | currency:'ARS':'symbol-narrow' }}</strong></p>
+
+        @if (puntosGanados() > 0) {
+          <p class="exito">¡Sumaste {{ puntosGanados() }} puntos!</p>
+        }
+
+        <a routerLink="/" class="boton">Volver al inicio</a>
+      </section>
+    }
+  </main>
+}

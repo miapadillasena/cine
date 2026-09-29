@@ -1,0 +1,133 @@
+@if (authService.usuario()) {
+  <main class="perfil">
+    <section class="cabecera">
+      <div>
+        <h1>{{ authService.usuario().nombre }} {{ authService.usuario().apellido }}</h1>
+        <p class="gris">{{ authService.usuario().email }}</p>
+      </div>
+      <div class="datos">
+        <div class="dato">
+          <span>Puntos</span>
+          <strong>{{ authService.usuario().puntos }}</strong>
+        </div>
+        <div class="dato">
+          <span>Crédito disponible</span>
+          <strong>{{ authService.usuario().credito | currency:'ARS':'symbol-narrow' }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <nav class="pestanas">
+      <button type="button" [class.activa]="pestana() === 'compras'" (click)="pestana.set('compras')">Mis compras</button>
+      <button type="button" [class.activa]="pestana() === 'peliculas'" (click)="pestana.set('peliculas')">Mis películas</button>
+      <button type="button" [class.activa]="pestana() === 'puntos'" (click)="pestana.set('puntos')">Puntos y canjes</button>
+    </nav>
+
+    @if (mensaje()) {
+      <p class="exito">{{ mensaje() }}</p>
+    }
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    @switch (pestana()) {
+      @case ('compras') {
+        @for (compra of compras(); track compra.id) {
+          <article class="compra">
+            @if (compra.funciones.peliculas.imagen_url) {
+              <img [src]="compra.funciones.peliculas.imagen_url" [alt]="compra.funciones.peliculas.nombre">
+            }
+            <div class="info">
+              <h3>{{ compra.funciones.peliculas.nombre }}</h3>
+              <p class="gris">{{ compra.funciones.inicio | date:'dd/MM/yyyy HH:mm' }} · {{ compra.funciones.salas.nombre }}</p>
+              <div class="butacas">
+                @for (butaca of compra.butacas; track $index) {
+                  <span class="butaca-chip">{{ butaca.fila }}{{ butaca.numero }}</span>
+                }
+              </div>
+              <p class="gris">Código: <strong>{{ compra.codigo }}</strong> · Pagado: {{ compra.total | currency:'ARS':'symbol-narrow' }}</p>
+            </div>
+            <div class="estado">
+              @if (compra.estado === 'cancelada') {
+                <span class="etiqueta cancelada">Cancelada</span>
+              } @else if (compra.entrada_validada) {
+                <span class="etiqueta usada">Usada</span>
+              } @else {
+                <span class="etiqueta vigente">Vigente</span>
+              }
+
+              @if (puedeCancelar(compra)) {
+                <button type="button" class="cancelar" (click)="cancelar(compra)">Cancelar</button>
+              } @else if (compra.estado === 'pagada' && !compra.entrada_validada) {
+                <span class="nota">Ya no se puede cancelar</span>
+              }
+            </div>
+          </article>
+        } @empty {
+          <p class="gris">Todavía no hiciste compras. <a routerLink="/">Ver cartelera</a></p>
+        }
+      }
+
+      @case ('peliculas') {
+        <div class="grilla">
+          @for (vista of misPeliculas(); track vista.pelicula.id) {
+            <article class="vista">
+              @if (vista.pelicula.imagen_url) {
+                <img [src]="vista.pelicula.imagen_url" [alt]="vista.pelicula.nombre">
+              }
+              <h3>{{ vista.pelicula.nombre }}</h3>
+              <p class="gris">{{ vista.fecha | date:'dd/MM/yyyy' }}</p>
+              @if (estrellasDe(vista.pelicula.id) > 0) {
+                <div>
+                  @for (n of [1, 2, 3, 4, 5]; track n) {
+                    <span class="estrella" [class.llena]="n <= estrellasDe(vista.pelicula.id)">★</span>
+                  }
+                </div>
+              } @else {
+                <a [routerLink]="['/pelicula', vista.pelicula.id]">Calificar</a>
+              }
+            </article>
+          } @empty {
+            <p class="gris">Acá vas a ver las películas que ya viste.</p>
+          }
+        </div>
+      }
+
+      @case ('puntos') {
+        <h2>Recompensas</h2>
+        <div class="grilla">
+          @for (recompensa of recompensas(); track recompensa.id) {
+            <article class="recompensa">
+              <h3>{{ recompensa.nombre }}</h3>
+              <strong>{{ recompensa.puntos }} puntos</strong>
+              <button
+                type="button"
+                class="boton"
+                [disabled]="authService.usuario().puntos < recompensa.puntos"
+                (click)="canjear(recompensa)">
+                Canjear
+              </button>
+            </article>
+          } @empty {
+            <p class="gris">Todavía no hay recompensas disponibles.</p>
+          }
+        </div>
+
+        <h2>Historial de canjes</h2>
+        @for (canje of canjes(); track canje.id) {
+          <div class="canje">
+            <span>{{ canje.created_at | date:'dd/MM/yyyy' }}</span>
+            <span>{{ canje.recompensas?.nombre }}</span>
+            <span class="gris">-{{ canje.puntos }} puntos</span>
+            <strong>{{ canje.codigo }}</strong>
+            <span class="etiqueta" [class.usada]="canje.usado" [class.vigente]="!canje.usado">
+              {{ canje.usado ? 'Usado' : 'Disponible' }}
+            </span>
+          </div>
+        } @empty {
+          <p class="gris">Todavía no hiciste canjes.</p>
+        }
+      }
+    }
+  </main>
+}

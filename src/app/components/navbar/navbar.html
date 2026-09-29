@@ -1,0 +1,38 @@
+<header class="navbar">
+  <a routerLink="/" class="logo">CINE<span>.</span></a>
+
+  <nav>
+    @if (authService.usuario()) {
+      <div class="campana">
+        <button type="button" class="icono" (click)="abierto.set(!abierto())">
+          🔔
+          @if (alertasService.notificaciones().length > 0) {
+            <span class="contador">{{ alertasService.notificaciones().length }}</span>
+          }
+        </button>
+
+        @if (abierto()) {
+          <div class="desplegable">
+            @for (notificacion of alertasService.notificaciones(); track notificacion.pelicula_id) {
+              <a [routerLink]="['/pelicula', notificacion.pelicula_id]" (click)="leer(notificacion)">
+                ¡Ya están a la venta las entradas de <strong>{{ notificacion.peliculas.nombre }}</strong>!
+              </a>
+            } @empty {
+              <p>No tenés notificaciones.</p>
+            }
+          </div>
+        }
+      </div>
+
+      <a routerLink="/perfil" routerLinkActive="activo">Mi perfil</a>
+      @if (authService.usuario().rol === 'admin') {
+        <a routerLink="/admin" routerLinkActive="activo">Admin</a>
+      }
+      <span class="saludo">Hola, {{ authService.usuario().nombre }}</span>
+      <button type="button" class="salir" (click)="cerrarSesion()">Cerrar sesión</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="activo">Ingresar</a>
+      <a routerLink="/registro" routerLinkActive="activo" class="destacado">Registrarse</a>
+    }
+  </nav>
+</header>

@@ -1,0 +1,16 @@
+<a class="tarjeta" [routerLink]="['/pelicula', pelicula().id]" appResaltar>
+  @if (posicion()) {
+    <span class="posicion">#{{ posicion() }}</span>
+  }
+
+  @if (pelicula().imagen_url) {
+    <img [src]="pelicula().imagen_url" [alt]="pelicula().nombre">
+  } @else {
+    <div class="sin-imagen">{{ pelicula().nombre }}</div>
+  }
+
+  <div class="info">
+    <h3>{{ pelicula().nombre }}</h3>
+    <p>{{ pelicula().duracion | duracion }} · {{ pelicula().restriccion }}</p>
+  </div>
+</a>
