@@ -8,6 +8,8 @@ import { SupabaseService } from '../../services/supabase';
 import { AuthService } from '../../services/auth';
 import { MapaButacas } from '../../components/mapa-butacas/mapa-butacas';
 import { ResaltarDirective } from '../../directives/resaltar.directive';
+import { EntradaPdfService } from '../../services/entrada-pdf'; 
+
 
 @Component({
   selector: 'app-compra',
@@ -44,6 +46,7 @@ export class Compra implements OnInit, OnDestroy {
   codigoCompra = signal('');
   totalPagado = signal(0);
   puntosGanados = signal(0);
+  qrCompra = signal('');
 
   precioBase = computed(() => {
     const f = this.funcion();
@@ -150,12 +153,13 @@ export class Compra implements OnInit, OnDestroy {
     return '';
   });
 
-  constructor(
+    constructor(
     private route: ActivatedRoute,
     private comprasService: ComprasService,
     private candyService: CandyService,
     private supabaseService: SupabaseService,
-    public authService: AuthService
+    public authService: AuthService,
+    private entradaPdfService: EntradaPdfService
   ) {}
 
   async ngOnInit() {
@@ -285,7 +289,7 @@ export class Compra implements OnInit, OnDestroy {
     this.mensajeCupon.set('Cupón aplicado: ' + encontrado.porcentaje + '% de descuento.');
   }
 
-  async pagar() {
+   async pagar() {
     this.procesando.set(true);
     this.errorPago.set('');
 
@@ -343,6 +347,7 @@ export class Compra implements OnInit, OnDestroy {
     }
 
     this.codigoCompra.set(codigo);
+    this.qrCompra.set(await this.entradaPdfService.generarQr(codigo));
     this.totalPagado.set(this.totalAPagar());
     this.puntosGanados.set(this.puntosAGanar());
     this.paso.set(4);
@@ -351,5 +356,17 @@ export class Compra implements OnInit, OnDestroy {
     if (usuario) {
       await this.authService.cargarUsuario();
     }
+  }
+
+  descargarEntrada() {
+    this.entradaPdfService.descargar({
+      codigo: this.codigoCompra(),
+      pelicula: this.funcion().peliculas.nombre,
+      sala: this.funcion().salas.nombre,
+      inicio: this.funcion().inicio,
+      butacas: this.seleccionadas(),
+      total: this.totalPagado(),
+      tieneCandy: this.productosElegidos().length > 0 || this.combosElegidos().length > 0
+    });
   }
 }

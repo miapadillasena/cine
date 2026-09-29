@@ -254,6 +254,9 @@
         <h2>¡Compra confirmada!</h2>
         <p class="gris">Presentá este código en el ingreso a la sala y en el candy bar.</p>
 
+        @if (qrCompra()) {
+          <img [src]="qrCompra()" alt="QR de la compra" class="qr">
+        }
         <div class="codigo">{{ codigoCompra() }}</div>
 
         <p>{{ funcion().peliculas.nombre }} · {{ funcion().inicio | date:'dd/MM/yyyy HH:mm' }} · {{ funcion().salas.nombre }}</p>
@@ -281,6 +284,8 @@
           <p class="exito">¡Sumaste {{ puntosGanados() }} puntos!</p>
         }
 
+        <button type="button" class="boton" (click)="descargarEntrada()">Descargar entrada (PDF)</button>
+        
         <a routerLink="/" class="boton">Volver al inicio</a>
       </section>
     }
