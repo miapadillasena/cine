@@ -1,0 +1,37 @@
+.validacion {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+
+.buscador {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.buscador input {
+  flex: 1;
+  padding: 10px;
+  text-transform: uppercase;
+}
+
+.tarjeta {
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.tarjeta button {
+  margin-top: 10px;
+}
+
+.mensaje {
+  font-weight: bold;
+}
+
+.hecho {
+  color: #2e9d4f;
+  font-weight: bold;
+}

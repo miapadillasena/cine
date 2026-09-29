@@ -1,0 +1,67 @@
+<section class="validacion">
+  <h1>Validar entradas y candy</h1>
+  <p class="subtitulo">Ingresá el código de la compra o del canje (los canjes empiezan con C-).</p>
+
+  <div class="buscador">
+    <input type="text" placeholder="Código" [(ngModel)]="codigo" (keyup.enter)="buscar()">
+    <button type="button" (click)="buscar()">Buscar</button>
+  </div>
+
+  @if (mensaje()) {
+    <p class="mensaje">{{ mensaje() }}</p>
+  }
+
+  @if (compra()) {
+    <div class="tarjeta">
+      <h2>{{ compra().funciones.peliculas.nombre }}</h2>
+      <p>{{ compra().funciones.salas.nombre }} · {{ compra().funciones.inicio | date:'dd/MM/yyyy HH:mm' }}</p>
+
+      @if (compra().estado === 'cancelada') {
+        <p class="error">Esta compra está cancelada. No se puede usar.</p>
+      } @else {
+        <h3>Butacas</h3>
+        <ul>
+          @for (butaca of compra().butacas; track butaca.fila + butaca.numero) {
+            <li>Fila {{ butaca.fila }} - Butaca {{ butaca.numero }} @if (butaca.vip) { (VIP) }</li>
+          }
+        </ul>
+
+        @if (compra().entrada_validada) {
+          <p class="hecho">✔ Entrada ya validada</p>
+        } @else {
+          <button type="button" (click)="validarEntrada()">Validar entrada</button>
+        }
+
+        <h3>Candy</h3>
+        @if (compra().items && compra().items.length > 0) {
+          <ul>
+            @for (item of compra().items; track $index) {
+              <li>{{ item.cantidad }} x {{ nombreItem(item) }}</li>
+            }
+          </ul>
+
+          @if (compra().candy_entregado) {
+            <p class="hecho">✔ Candy ya entregado</p>
+          } @else {
+            <button type="button" (click)="entregarCandy()">Entregar candy</button>
+          }
+        } @else {
+          <p>Esta compra no incluye candy.</p>
+        }
+      }
+    </div>
+  }
+
+  @if (canje()) {
+    <div class="tarjeta">
+      <h2>Canje de puntos</h2>
+      <p>Premio: <strong>{{ canje().recompensas.nombre }}</strong></p>
+
+      @if (canje().usado) {
+        <p class="hecho">✔ Este canje ya fue entregado</p>
+      } @else {
+        <button type="button" (click)="entregarCanje()">Entregar premio</button>
+      }
+    </div>
+  }
+</section>

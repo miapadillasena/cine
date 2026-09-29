@@ -28,6 +28,9 @@
       @if (authService.usuario().rol === 'admin') {
         <a routerLink="/admin" routerLinkActive="activo">Admin</a>
       }
+      @if (authService.usuario().rol === 'empleado' || authService.usuario().rol === 'admin') {
+        <a routerLink="/validacion" routerLinkActive="activo">Validar</a>
+      }
       <span class="saludo">Hola, {{ authService.usuario().nombre }}</span>
       <button type="button" class="salir" (click)="cerrarSesion()">Cerrar sesión</button>
     } @else {
