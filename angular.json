@@ -16,6 +16,14 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+              "allowedCommonJsDependencies": [
+                  "qrcode",
+                  "html2canvas",
+                  "canvg",
+                  "core-js",
+                  "raf",
+                  "rgbcolor"
+                ],
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -42,7 +50,8 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
