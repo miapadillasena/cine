@@ -55,7 +55,9 @@
               } @else {
                 <span class="etiqueta vigente">Vigente</span>
               }
-
+              @if (compra.estado === 'pagada') {
+                <button type="button" class="descargar" (click)="descargarEntrada(compra)">Descargar entrada</button>
+              }
               @if (puedeCancelar(compra)) {
                 <button type="button" class="cancelar" (click)="cancelar(compra)">Cancelar</button>
               } @else if (compra.estado === 'pagada' && !compra.entrada_validada) {

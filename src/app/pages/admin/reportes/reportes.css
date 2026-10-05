@@ -147,4 +147,18 @@ th {
 .vacio {
   color: #a0a0a0;
   text-align: center;
+} 
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.exportar {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
 }

@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { AuthService } from '../../services/auth';
 import { PerfilService } from '../../services/perfil';
+import { EntradaPdfService } from '../../services/entrada-pdf';
 
 @Component({
   selector: 'app-perfil',
@@ -33,7 +34,11 @@ export class Perfil implements OnInit {
     return Object.values(vistas) as any[];
   });
 
-  constructor(public authService: AuthService, private perfilService: PerfilService) {}
+  constructor(
+    public authService: AuthService,
+    private perfilService: PerfilService,
+    private entradaPdfService: EntradaPdfService
+  ) {}
 
   async ngOnInit() {
     await this.authService.cargarUsuario();
@@ -71,6 +76,18 @@ export class Perfil implements OnInit {
     this.mensaje.set('Compra cancelada. Se acreditaron $' + credito + ' a tu cuenta.');
     await this.authService.cargarUsuario();
     await this.cargarDatos();
+  }
+
+  descargarEntrada(compra: any) {
+    this.entradaPdfService.descargar({
+      codigo: compra.codigo,
+      pelicula: compra.funciones.peliculas.nombre,
+      sala: compra.funciones.salas.nombre,
+      inicio: compra.funciones.inicio,
+      butacas: compra.butacas,
+      total: compra.total,
+      tieneCandy: compra.items && compra.items.length > 0
+    });
   }
 
   estrellasDe(peliculaId: number) {
